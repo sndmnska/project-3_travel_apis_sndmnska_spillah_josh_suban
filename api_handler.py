@@ -1,3 +1,4 @@
+import requests
 """
 API Handler
 
@@ -12,3 +13,17 @@ If one or more APIs fails, what does this return?  I would argue that, if possib
 API geolocation call -> 
 
 """
+
+def handle_request(url, params):
+    '''
+    Manages error handling for our requests.
+    :param url: API URL
+    :param params: API parameters
+    :return: json if successful or None if not.
+    '''
+    response = requests.get(url, params)
+
+    if response.status_code == 200:
+        return response.json()
+    if response.status_code == 404:
+        return None
