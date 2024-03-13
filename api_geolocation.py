@@ -22,3 +22,14 @@ def geo_request(city):
         return None
     else:
         return data
+
+def get_country_code(data):
+    '''
+    :param data: Dict of user's chosen city geo data.
+    :return: String of ISO-2 country code or None if invalid.
+    '''
+
+    if not data or len(data) == 0 or not data[0] or not data[0]['country']:
+        return None
+
+    return data[0]['country']
