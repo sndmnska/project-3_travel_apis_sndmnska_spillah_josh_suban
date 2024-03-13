@@ -1,4 +1,5 @@
 import requests
+from ui import message
 """
 API Handler
 
@@ -27,3 +28,27 @@ def handle_request(url, params):
         return response.json()
     if response.status_code == 404:
         return None
+
+def API_request(url, params):
+    '''
+        Manages error handling for the data of our requests.
+        :param url: API URL
+        :param params: API parameters
+        :return: data if successful or None if not.
+        '''
+
+    data = None
+
+    try:
+        data = handle_request(url, params)
+    except requests.exceptions.ConnectionError as e:
+        message('Please check your internet connection!')
+        return None
+    except Exception:
+        message('An Unknown error has occurred!')
+        return None
+
+    if not data or len(data) == 0:
+        return None
+    else:
+        return data
