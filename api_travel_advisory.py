@@ -3,10 +3,10 @@ import os
 from ui import message
 
 # Grab key from env variables.
-api_key = os.environ.get('API_KEY')
+geo_api_key = os.environ.get('GEO_API')
 
 # raises an error if environment variable is not set
-assert api_key is not None
+assert geo_api_key is not None
 
 def main():
     city = get_city()
@@ -26,14 +26,21 @@ def main():
     url = 'https://www.travel-advisory.info/api'
     data = handle_request(url, params)
 
+    (country_data, country_advisory) = parse_country_data(data, country_code)
+
+    # Let me know if the tabs are a good idea or not, to me it makes it feel like its more grouped.
+    message(f'The advisory for {country_data["name"]}:')
+    message(f'\t {country_advisory["message"]}')
+    message(f'\t Last updated: {country_advisory["updated"]} UTC')
+    message(f'\t Source: {country_advisory["source"]}')
+
+    return data
+
+def parse_country_data(data, country_code):
     country_data = data['data'][country_code]
     country_advisory = country_data['advisory']
 
-    # Let me know if the tabs are a good idea or not, to me it makes it feel like its more grouped.
-    message(f'The advisory for {country_data['name']}:')
-    message(f'\t {country_advisory['message']}')
-    message(f'\t Last updated: {country_advisory['updated']} UTC')
-    message(f'\t Source: {country_advisory['source']}')
+    return country_data, country_advisory
 
 def handle_request(url, params):
     '''
@@ -56,7 +63,7 @@ def geo_request(city):
     :param city: User's City.
     :return: Dict of user's geo request or None if not found.
     '''
-    params = {'q': city, 'limit': '1', 'APPID': api_key}
+    params = {'q': city, 'limit': '1', 'APPID': geo_api_key}
     url = 'http://api.openweathermap.org/geo/1.0/direct'
     data = None
 
