@@ -32,11 +32,12 @@ NO API KEY TREE: # TODO Use for error handling
 """
 
 import requests, os
+from api_handler import handle_request, API_request
 
 city_name = ''
 
-root_url = 'https://app.ticketmaster.com/discovery/v2/events'
-ticketmaster_api_key = os.environ["TICKETMASTER_KEY"]
+root_url = 'https://app.ticketmaster.com/discovery/v2/'
+key = os.environ.get("TICKETMASTER_KEY")
 
 def import_city_name():
     '''
@@ -58,16 +59,27 @@ def get_request_from_city_name(city_name):
     :input: city_name
     :outputs: [dict] response, [dict] error information
     '''
+    url = root_url + 'events' # build the root url in this function, in case the app in the future wants to use more than one request type.
+    query = {'radius': 25, 'unit':'miles','city': city_name } # 'apikey': key}
 
-    pass
+    
+    response = requests.get(url, params=query).json()
+    if response['fault']: # if api returns with a fault #TODO COME BACK HERE
+        pass        
+    
+        
+
+    
 
 def get_top_event_from_response(response):    
-    '''
+    '''d
     Extract the top event from a successful response.
         Send error if unexpected structure
     :input: response dictionary
     :outputs: [dict] event key:value pair, [dict] error information
     '''
+
+    
     pass
 
 def convert_event_to_str(event):
@@ -81,8 +93,8 @@ def main():
     city_name = import_city_name() 
 
     get_request_from_city_name(city_name)
-    get_top_event_from_response(response)
-    event_str = convert_event_to_str(event)
+    # get_top_event_from_response(response)
+    # event_str = convert_event_to_str(event)
     # return event_str to api_handler -> main.py
 
 
