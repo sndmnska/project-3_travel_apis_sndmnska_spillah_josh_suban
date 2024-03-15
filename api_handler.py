@@ -76,8 +76,9 @@ def API_request(url, params, headers=None):  # header defaults to None, allows i
 
     try:
         data = handle_request(url, headers, params)
-    except requests.exceptions.ConnectionError as e:
+    except ConnectionError as e:
         message('Please check your internet connection!')
+        message(e)
         return None
     except Exception as e:
         message('An Unknown error has occurred!')
