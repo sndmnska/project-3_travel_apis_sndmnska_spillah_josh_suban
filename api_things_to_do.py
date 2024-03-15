@@ -63,7 +63,8 @@ def get_request_from_city_name(city_name):
     query = {'radius': 25, 'unit':'miles','city': city_name } # 'apikey': key}
 
     
-    response = requests.get(url, params=query).json()
+    response = requests.get(url, params=query)
+    code = response.status_code
     if response['fault']: # if api returns with a fault #TODO COME BACK HERE
         pass        
     
