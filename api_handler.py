@@ -24,6 +24,11 @@ def handle_request(url, params):
     '''
     response = requests.get(url, params)
 
+    # TODO This code is brittle.  Can we include status code ranges, and an else function for handling other codes?
+    # Common successful codes include 200, 201, 204, etc.  There are many failure status codes as well. 
+    # 200 - successful, with data
+    # 204 - successful, no data to show
+    
     if response.status_code == 200:
         return response.json()
     if response.status_code == 404:
