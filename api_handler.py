@@ -47,8 +47,8 @@ def handle_request(url, params):
                 message(f'Error 403 Forbidden request: API Key not authorized for a request. Please try reentering your API key, or get a new one.')
             if status_code == 404: # 404 Not Found
                 message(f'Error 404 Not Found: Requested api NOT found at requested url.')
-        else:  # Other Client Error 4xx
-            message(f'Client Error while retrieving the API request -- Error {status_code}. Please see online for more information.')
+            else:  # Other Client Error 4xx
+                message(f'Client Error while retrieving the API request -- Error {status_code}. Please see online for more information.')
         if status_code >= 500 and status_code < 600:
             message(f'Error {status_code} - A Server Error Occurred. ')
         return None
