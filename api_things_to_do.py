@@ -20,7 +20,8 @@ All key-value pairs are delineated by '&'.  Start with the '*.json' and '?'
 
 
 
-import requests, os
+import os
+from pprint import pprint
 from api_handler import API_request
 
 city_name = ''
@@ -46,10 +47,10 @@ def get_events_request_from_city_name(city_name):
     Request a json response from the Ticketmaster API.   
         Convert response to dictionary, or send errors as applicable.
     :input: city_name
-    :outputs: [dict] response, [dict] error information
+    :outputs: [dict] response, FIXME [dict] error information
     '''
     url = root_url + 'events' # build the root url in this function, in case the app in the future wants to use more than one request type.
-    query = {'radius': 50, 'unit':'miles','city': city_name} #, 'apikey': key}
+    query = {'radius': 50, 'unit':'miles','city': city_name, 'apikey': key}
 
     response = API_request(url, query)
     if response is None:
@@ -66,7 +67,10 @@ def get_top_event_from_response(response):
     :input: response dictionary
     :outputs: [dict] event key:value pair, [dict] error information
     '''
-
+    print(response)
+    events = response['_embedded']['events']
+    count = len(events)
+    event_00 = events[00]
     
     pass
 
@@ -80,8 +84,8 @@ def convert_event_to_str(event):
 def main():
     city_name = import_city_name() 
 
-    get_events_request_from_city_name(city_name)
-    # get_top_event_from_response(response)
+    response = get_events_request_from_city_name(city_name)
+    get_top_event_from_response(response)
     # event_str = convert_event_to_str(event)
     # return event_str to api_handler -> main.py
 
