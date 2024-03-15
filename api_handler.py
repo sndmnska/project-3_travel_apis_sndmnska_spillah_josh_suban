@@ -16,17 +16,17 @@ API geolocation call ->
 
 """
 
-def handle_request(url, header, params):
+def handle_request(url, headers, params):
     '''
     Manages error handling for our requests.
     :param url: API URL
     :param params: API parameters
     :return: json if successful or None if not.
     '''
-    if header is None:
-        response = requests.get(url, params)
+    if headers is None:
+        response = requests.get(url, params=params)
     else:
-        response = requests.get(url, header, params)
+        response = requests.get(url, headers=headers, params=params)
 
     # Status code categories:  <https://restfulapi.net/http-status-codes/>
     # 1xx: Informational  |  2xx: Success  | 3xx: Redirection | 4xx: Client Error | 5xx: Server Error
@@ -63,7 +63,7 @@ def handle_request(url, header, params):
 
         return None
 
-def API_request(url, params, header=None):  # header defaults to None, allows it to be an optional argument
+def API_request(url, params, headers=None):  # header defaults to None, allows it to be an optional argument
     '''
         Manages error handling for the data of our requests.
         :param url: API URL
@@ -75,12 +75,13 @@ def API_request(url, params, header=None):  # header defaults to None, allows it
     data = None
 
     try:
-        data = handle_request(url, header, params)
+        data = handle_request(url, headers, params)
     except requests.exceptions.ConnectionError as e:
         message('Please check your internet connection!')
         return None
-    except Exception:
+    except Exception as e:
         message('An Unknown error has occurred!')
+        message(e)
         return None
 
     if not data or len(data) == 0:
