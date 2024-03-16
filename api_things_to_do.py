@@ -30,11 +30,10 @@ key = os.environ.get("TICKETMASTER_KEY")
 
 def import_city_name():
     '''
-    Get city name from geolocation search
+    # TODO Get city name from geolocation search
     :output: [str] city name
     '''
-
-    # TODO FIXME - Delete these next few lines when ready to test with api_geolocation.py
+    # [ ] DELETEME - Delete/comment out these next few lines when ready to test with api_geolocation.py
     # For testing purposes, assign a known working city name. 
     sample_city = 'Minneapolis'  # Minneapolis, MN, USA [44.9772995, -93.2654692]
     city_name = sample_city
@@ -76,12 +75,10 @@ def get_random_event_from_response(response):
 
 def convert_event_name_to_str(event):
     '''
-    :input: [dict] event key:value pair
-    :output: [str] event name, capitalized   
+    :input: [dict] event info
+    :output: [str] event name   
     '''
-    event
-
-
+    event_name = event['name']
     return event_name
 
 def main():
