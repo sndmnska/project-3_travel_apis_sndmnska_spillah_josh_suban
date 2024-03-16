@@ -16,14 +16,17 @@ API geolocation call ->
 
 """
 
-def handle_request(url, params):
+def handle_request(url, headers, params):
     '''
     Manages error handling for our requests.
     :param url: API URL
     :param params: API parameters
     :return: json if successful or None if not.
     '''
-    response = requests.get(url, params)
+    if headers is None:
+        response = requests.get(url, params=params)
+    else:
+        response = requests.get(url, headers=headers, params=params)
 
     # Status code categories:  <https://restfulapi.net/http-status-codes/>
     # 1xx: Informational  |  2xx: Success  | 3xx: Redirection | 4xx: Client Error | 5xx: Server Error
@@ -37,16 +40,16 @@ def handle_request(url, params):
     elif status_code >= 300 and status_code < 600:
         if status_code < 400: # Redirection Category
             message(f'Response Status code: {status_code}. "Redirection" Please search online for more details.')
+        if status_code >= 400 and status_code < 500:
                 # A list of common 400 codes
-            if status_code >= 400 and status_code < 500:
-                if status_code == 400: # 400 Bad Request (Incorrect Syntax)
-                    message(f'Error 400 - Bad Request. Incorrect request syntax. Please fix.')
-                if status_code == 401: # 401 Unauthorized
-                    message(f'Error 401 Unauthorized request: Needs user authentication information. \n\t*****Do you have your API key configured correctly?')
-                if status_code == 403: # 403 Forbidden - API key not accepted
-                    message(f'Error 403 Forbidden request: API Key not authorized for a request. Please try reentering your API key, or get a new one.')
-                if status_code == 404: # 404 Not Found
-                    message(f'Error 404 Not Found: Requested api NOT found at requested url.')
+            if status_code == 400: # 400 Bad Request (Incorrect Syntax)
+                message(f'Error 400 - Bad Request. Incorrect request syntax. Please fix.')
+            if status_code == 401: # 401 Unauthorized
+                message(f'Error 401 Unauthorized request: Needs user authentication information. \n\t*****Do you have your API key configured correctly?')
+            if status_code == 403: # 403 Forbidden - API key not accepted
+                message(f'Error 403 Forbidden request: API Key not authorized for a request. Please try reentering your API key, or get a new one.')
+            if status_code == 404: # 404 Not Found
+                message(f'Error 404 Not Found: Requested api NOT found at requested url.')
             else:  # Other Client Error 4xx
                 message(f'Client Error while retrieving the API request -- Error {status_code}. Please see online for more information.')
         if status_code >= 500 and status_code < 600:
@@ -60,23 +63,26 @@ def handle_request(url, params):
 
         return None
 
-def API_request(url, params):
+def API_request(url, params, headers=None):  # header defaults to None, allows it to be an optional argument
     '''
         Manages error handling for the data of our requests.
         :param url: API URL
         :param params: API parameters
+        :param header: API headers (optional)
         :return: data if successful or None if not.
         '''
 
     data = None
 
     try:
-        data = handle_request(url, params)
+        data = handle_request(url, headers, params)
     except requests.exceptions.ConnectionError as e:
         message('Please check your internet connection!')
+        message(e)
         return None
-    except Exception:
+    except Exception as e:
         message('An Unknown error has occurred!')
+        message(e)
         return None
 
     if not data or len(data) == 0:
