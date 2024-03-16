@@ -1,4 +1,5 @@
 # To-do import module entries.
+from api_travel_advisory import get_travel_advisory
 from api_geolocation import geo_request
 from api_geolocation import get_country_code
 
@@ -10,6 +11,7 @@ Project 3 - A Useful Travel App (working title)
 user_city = None
 user_country_code = None
 
+travel_advisory_message = None
 
 def main():
     """
@@ -23,6 +25,7 @@ def main():
 
     # Put module entry points UNDER this.
 
+    travel_advisory_message = get_travel_advisory(user_country_code)
 
 def get_city():
     """
