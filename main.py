@@ -10,13 +10,27 @@ from ui import message, user_question
 from data_presenter import print_businesses
 from api_food_to_eat import get_restaurants_for_location
 
+user_city = None
+user_country_code = None
+
+travel_advisory_message = None
+
 
 def main():
+    """
+        Main entry point for our program. Everything starts here.
+        :return:
+        """
+    user_city = get_city()
 
-    city = user_question('Enter the name of the city: ').strip()
-    country = user_question('Enter the 2-letter country code: ').strip().upper()
+    geo_data = geo_request(user_city)
+    user_country_code = get_country_code(geo_data)
 
-    location = f"{city}, {country}"
+    # Put module entry points UNDER this.
+
+    travel_advisory_message = get_travel_advisory(user_country_code)
+
+    location = f"{user_city}, {user_country_code}"
     restaurants = get_restaurants_for_location(location)
 
     if restaurants:
@@ -31,27 +45,6 @@ def main():
     else:
         message('No restaurants found in the given location.')
 
-
-
-=======
-user_city = None
-user_country_code = None
-
-travel_advisory_message = None
-
-def main():
-    """
-    Main entry point for our program. Everything starts here.
-    :return:
-    """
-    user_city = get_city()
-
-    geo_data = geo_request(user_city)
-    user_country_code = get_country_code(geo_data)
-
-    # Put module entry points UNDER this.
-
-    travel_advisory_message = get_travel_advisory(user_country_code)
 
 def get_city():
     """
