@@ -2,9 +2,12 @@
 This is main section
 """
 from ui import message
+from data_presenter import print_businesses
 from api_food_to_eat import get_restaurants_for_location
 
+
 def main():
+
     city = input('Enter the name of the city: ').strip()
     country = input('Enter the 2-letter country code: ').strip().upper()
 
@@ -13,11 +16,13 @@ def main():
 
     if restaurants:
         for restaurant in restaurants:
-            name = restaurant.get('name')
-            city = restaurant['location'].get('city')
-            country = restaurant['location'].get('country')
-            address = restaurant['location'].get('address1')
-            message(f"Name: {name}, City: {city}, Country: {country}, Address: {address}")
+            print_businesses(restaurant)
+            # add_restaurant_data(restaurant)
+
+            make_choice = input("Press Enter to continuous or 'q' to quit: ")
+            if make_choice.lower() == 'q':
+                message("Thanks, goodbye.")
+                break
     else:
         message('No restaurants found in the given location.')
 
