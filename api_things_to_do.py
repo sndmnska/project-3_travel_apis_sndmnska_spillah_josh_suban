@@ -91,9 +91,11 @@ def main():
     try:
         event = get_random_event_from_response(response)
     except Exception as e:
-        message(e)
+        message(e) # TODO - User friendly error handling
+    
+    event_name = convert_event_name_to_str(event)
+    return event_name # TODO - tie into main.py. Give some variables.
 
 main()        
 
-    # event_str = convert_event_to_str(event)
     # return event_str to api_handler -> main.py
