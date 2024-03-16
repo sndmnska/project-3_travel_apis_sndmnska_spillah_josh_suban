@@ -21,10 +21,9 @@ All key-value pairs are delineated by '&'.  Start with the '*.json' and '?'
 
 
 import os
-from pprint import pprint
 from api_handler import API_request
-
-city_name = ''
+from ui import message
+from random import randint
 
 root_url = 'https://app.ticketmaster.com/discovery/v2/'
 key = os.environ.get("TICKETMASTER_KEY")
@@ -44,13 +43,13 @@ def import_city_name():
 
 def get_events_request_from_city_name(city_name):
     '''
-    Request a json response from the Ticketmaster API.   
+    Request json response from the Ticketmaster API: All events within 30 miles of requested location.  
         Convert response to dictionary, or send errors as applicable.
     :input: city_name
-    :outputs: [dict] response, FIXME [dict] error information
+    :output: [dict] response
     '''
     url = root_url + 'events' # build the root url in this function, in case the app in the future wants to use more than one request type.
-    query = {'radius': 50, 'unit':'miles','city': city_name, 'apikey': key}
+    query = {'radius': 30, 'unit':'miles','city': city_name, 'apikey': key}
 
     response = API_request(url, query)
     if response is None:
@@ -60,38 +59,41 @@ def get_events_request_from_city_name(city_name):
 
     
 
-def get_top_event_from_response(response):    
+def get_random_event_from_response(response):    
     '''
-    Extract the top event from a successful response.
+    Extract a random event from a successful response.
         Send error if unexpected structure
     :input: response dictionary
     :outputs: [dict] event key:value pair, [dict] error information
     '''
     print(response)
     events = response['_embedded']['events']
-    count = len(events)
-    event_00 = events[00]
+    event_count = len(events)
+    rand_event_choice = randint(1, event_count)
+    chosen_event = events[rand_event_choice]
     
-    pass
+    return chosen_event
 
-def convert_event_to_str(event):
+def convert_event_name_to_str(event):
     '''
     :input: [dict] event key:value pair
     :output: [str] event name, capitalized   
     '''
-    return string
+    event
+
+
+    return event_name
 
 def main():
     city_name = import_city_name() 
 
     response = get_events_request_from_city_name(city_name)
-    get_top_event_from_response(response)
+    try:
+        event = get_random_event_from_response(response)
+    except Exception as e:
+        message(e)
+
+main()        
+
     # event_str = convert_event_to_str(event)
     # return event_str to api_handler -> main.py
-
-
-
-
-
-if __name__ == "__main__":
-    main()
