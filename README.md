@@ -19,6 +19,6 @@ Finally it will save this information to show to the user at a later date, effec
 
 Environment Variables
 
-1. `GEO_API` is api key from https://openweathermap.org/
+1. `GEO_API` is api key from https://openweathermap.org/, you **WILL** have to make an account.
 2. `YELP_API_KEY` is api key from https://www.yelp.com/developers, you **WILL** have to make an account.
 3. `TICKETMASTER_KEY` is api key from https://developer.ticketmaster.com/products-and-docs/apis/getting-started/, and you **WILL** have to make an account.
