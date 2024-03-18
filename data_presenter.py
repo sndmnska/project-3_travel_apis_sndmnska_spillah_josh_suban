@@ -35,9 +35,9 @@ class DataPresenter:
                 return f"Geo-location data for {place_name} not found in db"
 
     @staticmethod
-    def add_food_to_eat(country, food_name, description):
+    def add_food_to_eat(city, food_name, description):
         with sqlite3.connect('records_db.sqlite') as conn:
-            conn.execute("INSERT INTO foods_to_eat (country, food_name, description) VALUES (?, ?, ?)",(country, food_name, description))
+            conn.execute("INSERT INTO foods_to_eat (city, food_name, description) VALUES (?, ?, ?)",(city, food_name, description))
 
     @staticmethod
     def add_things_to_do(place_name, activity, description):
