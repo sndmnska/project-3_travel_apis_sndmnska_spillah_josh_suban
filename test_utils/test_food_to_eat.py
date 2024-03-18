@@ -28,7 +28,7 @@ class TestFoodToEat(TestCase):
         self.assertEqual(restaurants[0]['name'], 'Restaurant 1')
         self.assertEqual(restaurants[1]['name'], 'Restaurant 2')
         self.assertEqual(restaurants[2]['name'], 'Restaurant 3')
-        
+
 
 if __name__ == '__main__':
     unittest.main()
