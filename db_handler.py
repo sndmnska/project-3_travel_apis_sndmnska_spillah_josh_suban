@@ -8,10 +8,12 @@ import sqlite3
 def create_table(): # to check if table exists
     #creates table if table does not exists
     with sqlite3.connect('records_db.sqlite') as conn:
+        conn.execute('CREATE TABLE IF NOT EXISTS restaurant_data(country TEXT, restaurant TEXT, description TEXT')
+
         conn.execute('CREATE TABLE IF NOT EXISTS food_to_eat(country TEXT, food_name TEXT, description TEXT')
         conn.execute('CREATE TABLE IF NOT EXISTS travel_advisory(country TEXT, advisory TEXT')
-        conn.execute('CREATE TABLE IF NOT EXISTS things_to_do(destination TEXT, activity TEXT, description TEXT ')
-        conn.execute('CREATE TABLE IF NOT EXISTS geo_location(destination TEXT, latitude TEXT, longtitude TEXT')
+        conn.execute('CREATE TABLE IF NOT EXISTS things_to_do(place_name TEXT, activity TEXT, description TEXT ')
+        conn.execute('CREATE TABLE IF NOT EXISTS geo_location(place_name TEXT, latitude TEXT, longtitude TEXT')
     conn.close()
 
 # functions to put data in the right tables in the SQLITE database
@@ -35,17 +37,17 @@ def create_table(): # to check if table exists
         conn.close()
 
 
-    def add_things_to_do(destination, activivty, description):
+    def add_things_to_do(place_name, activivty, description):
         create_table()
         with sqlite3.connect('records_db.sqlite') as conn:
-            conn.execute("INSERT INTO things_to_do VALUES (?,?,?)", (destination, activivty,description))
+            conn.execute("INSERT INTO things_to_do VALUES (?,?,?)", (place_name, activivty,description))
 
         conn.close()
 
 
 
-    def add_geo_location(destination, latitude,longitude):
+    def add_geo_location(place_name, latitude,longitude):
         create_table()
         with sqlite3.connect('records_db.sqlite') as conn:
-            conn.execute("INSERT INTO geo_location VALUES (?,?,?)", (destination, latitude,longitude))
+            conn.execute("INSERT INTO geo_location VALUES (?,?,?)", (place_name, latitude,longitude))
         conn.close()
