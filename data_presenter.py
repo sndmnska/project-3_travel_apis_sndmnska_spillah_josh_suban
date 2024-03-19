@@ -39,20 +39,20 @@ class DataPresenter:
                 return f"Geo-location data for {place_name} not found in db"
 
     @staticmethod
-    def add_food_to_eat(city, food_name, description):
+    def add_food_to_eat(save_id,city, restaurant_name):
         with sqlite3.connect('records_db.sqlite') as conn:
-            conn.execute("INSERT INTO foods_to_eat (city, food_name, description) VALUES (?, ?, ?)",(city, food_name, description))
+            conn.execute("INSERT INTO food_to_eat (save_id, city, restaurant_name) VALUES (?, ?, ?)",(save_id,city, restaurant_name))
 
     @staticmethod
-    def add_things_to_do(place_name, activity, description):
+    def add_things_to_do(save_id, event_title, event_url):
         with sqlite3.connect('records_db.sqlite') as conn:
-            conn.execute("INSERT INTO things_to_do (place_name, activity, description) VALUES (?, ?, ?)", (place_name, activity, description))
+            conn.execute("INSERT INTO things_to_do (save_id, event_title, event_url) VALUES (?, ?, ?)", (save_id, event_title, event_url))
 
 
     @staticmethod
-    def add_travel_advisory(country, advisory):
+    def add_travel_advisory(save_id,country, advisory):
         with sqlite3.connect('records_db.sqlite') as conn:
-            conn.execute("INSERT INTO travel_advisory (country, advisory) VALUES (?, ?)", (country, advisory))
+            conn.execute("INSERT INTO travel_advisory (save_id,country, advisory) VALUES (?, ?, ?)", (save_id, country, advisory))
 
 
 
