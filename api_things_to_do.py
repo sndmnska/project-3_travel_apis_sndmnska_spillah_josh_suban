@@ -12,6 +12,9 @@ Get a list of all events for Adele in Canada
  https://app.ticketmaster.com/discovery/v2/events.json?
 attractionId=K8vZ917Gku7&countryCode=CA&apikey=${API_KEY}
 
+
+conn.execute("INSERT INTO things_to_do VALUES (?,?,?)", (save_id, event_title, event_url))
+
 All key-value pairs are delineated by '&'.  Start with the '*.json' and '?'
 
 :input: city_name from api_geolocation
@@ -70,16 +73,17 @@ def get_random_event_from_response(response):
     event_count = len(events)
     rand_event_choice = randint(1, event_count)
     chosen_event = events[rand_event_choice]
-    
+    # TODO Handle errors from different structure
     return chosen_event
 
-def convert_event_name_to_str(event):
+def convert_event_to_strings(event):
     '''
     :input: [dict] event info
-    :output: [str] event name   
+    :outputs: [str] event name, [str] event_url   
     '''
     event_name = event['name']
-    return event_name
+    event_url = event['url']
+    return event_name, event_url
 
 def main():
     city_name = import_city_name() 
@@ -90,7 +94,7 @@ def main():
     except Exception as e:
         message(e) # TODO - User friendly error handling
     
-    event_name = convert_event_name_to_str(event)
+    event_name = convert_event_to_strings(event)
     return event_name # TODO - tie into main.py. Give some variables.
 
 main()        
