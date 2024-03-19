@@ -10,6 +10,7 @@ class DataPresenter:
 
     @staticmethod
     def add_bookmarks(user_id, place_name):
+
         with sqlite3.connect('records_db.sqlite') as conn:
             conn.execute("INSERT INTO bookmarks (user_id, place_name) VALUES (?, ?)", (user_id, place_name))
 
