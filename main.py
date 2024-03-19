@@ -2,6 +2,8 @@
 from api_travel_advisory import get_travel_advisory
 from api_geolocation import geo_request
 from api_geolocation import get_country_code
+from db_handler import DBHandler
+from data_presenter import DataPresenter
 
 """
 This is main section
@@ -59,6 +61,26 @@ def get_city():
 
     return city.capitalize()
 
+def store_data():
+    db_handler = DBHandler('records_db.sqlite')
+
+    db_handler.create_table()# creates table if it does not exist
+
+#the following lines add data using dbhandler methods
+
+db_handler.add_travel_advisory(advisory_data)
+db_handler.addd_food_to_eat(food_data)
+db_handler.add_things_to_do(things_to_do_data)
+db_handler.add_geo_location(geo_location_data)
+
+# finding geo location data
+place_name = "place name"
+geo_location = DataPresenter.get_geolocation_data(place_name)
+print(geo_location)
+
 
 if __name__ == "__main__":
     main()
+
+if __name__ == "__main__":
+    store_data()
