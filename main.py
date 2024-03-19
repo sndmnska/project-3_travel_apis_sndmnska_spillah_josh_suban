@@ -3,6 +3,8 @@ from api_travel_advisory import get_travel_advisory
 from api_geolocation import geo_request
 from api_geolocation import get_country_code
 
+from api_things_to_do import get_random_local_event
+
 from ui import message, user_question
 from data_presenter import print_businesses
 from api_food_to_eat import get_restaurants_for_location
@@ -11,6 +13,8 @@ user_city = None
 user_country_code = None
 travel_advisory_message = None
 
+event_name = None
+event_url = None
 
 def main():
     """
@@ -25,6 +29,8 @@ def main():
     # Put module entry points UNDER this.
 
     travel_advisory_message = get_travel_advisory(user_country_code)
+
+    event_name, event_url = get_random_local_event(user_city)
 
     location = f"{user_city}, {user_country_code}"
     restaurants = get_restaurants_for_location(location)

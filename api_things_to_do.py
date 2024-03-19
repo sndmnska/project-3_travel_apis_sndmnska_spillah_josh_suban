@@ -75,17 +75,21 @@ def convert_event_to_strings(event):
     event_url = event['url']
     return event_name, event_url
 
-# TODO Check syntax (coded on GitHub mobile during work lull. 
-# TODO Connect to main.py
 def get_random_local_event(city_name):
+    '''
+    High-level method that calls on the other methods in this module.
+      Intended to connect to main.py.
+    :input: [str] 
+    :outputs: [str]
+    '''
     response = get_events_request_from_city_name(city_name)
     try:
         event = get_random_event_from_response(response)
     except Exception as e:
         message(e) # TODO - User friendly error handling
     
-    event_name = convert_event_to_strings(event)
-    return event_name # TODO - tie into main.py. Give some variables.
+    event_name, event_url = convert_event_to_strings(event)
+    return event_name, event_url
    
 
     # return event_str to api_handler -> main.py#
