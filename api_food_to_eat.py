@@ -33,6 +33,14 @@ def get_restaurants_for_location(location):
     else:
         return restaurants
 
-    for restaurant in restaurants:
-        return restaurant
+    #for restaurant in restaurants:
+    #    return restaurant
+
+    def convert_restaurant_name_to_str(restaurant):
+        '''
+        :input: [dict]  restaurant info
+        :output: [str] restaurant name
+        '''
+        restaurant_name = restaurant['name']
+        return restaurant_name
 

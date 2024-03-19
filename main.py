@@ -15,7 +15,6 @@ user_country_code = None
 
 travel_advisory_message = None
 
-
 def main():
     """
         Main entry point for our program. Everything starts here.
