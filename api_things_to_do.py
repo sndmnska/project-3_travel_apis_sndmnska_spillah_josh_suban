@@ -1,21 +1,25 @@
 """
 We'll be using the ticketmaster API to search for things to do in the querant location. 
 
-searches can be done using latlong, radius. 
+searches can be done using city name
 
 Examples: 
 
 Search for music events in the Los Angeles area
  https://app.ticketmaster.com/discovery/v2/events.json?
-classificationName=music&dmaId=324&apikey=${API_KEY}
+classificationName=music&dmaId=324&apikey=${TICKETMASTER_KEY}
 Get a list of all events for Adele in Canada
  https://app.ticketmaster.com/discovery/v2/events.json?
-attractionId=K8vZ917Gku7&countryCode=CA&apikey=${API_KEY}
+attractionId=K8vZ917Gku7&countryCode=CA&apikey=${TICKETMASTER_KEY}
+
+
+conn.execute("INSERT INTO things_to_do VALUES (?,?,?)", (save_id, event_title, event_url))
 
 All key-value pairs are delineated by '&'.  Start with the '*.json' and '?'
-
+"""
+"""
 :input: city_name from api_geolocation
-:output: str name of the top (1) event returned 
+:output: str name o
 """
 
 
@@ -28,17 +32,21 @@ from random import randint
 root_url = 'https://app.ticketmaster.com/discovery/v2/'
 key = os.environ.get("TICKETMASTER_KEY")
 
-def import_city_name():
+def get_random_local_event(city_name):
     '''
-    # TODO Get city name from geolocation search
-    :output: [str] city name
+    High-level method that calls on the other methods in this module.
+      This method is intended to connect to main.py.
+    :input: [str] city_name
+    :outputs: [str] event_name, event_url  (None if exceptions are encountered)
     '''
-    # [ ] DELETEME - Delete/comment out these next few lines when ready to test with api_geolocation.py
-    # For testing purposes, assign a known working city name. 
-    sample_city = 'Minneapolis'  # Minneapolis, MN, USA [44.9772995, -93.2654692]
-    city_name = sample_city
-
-    return city_name
+    response = get_events_request_from_city_name(city_name)
+    if response is None:
+        return None, None
+    event = get_random_event_from_response(response)
+    if event is None:
+        return None, None
+    event_name, event_url = convert_event_to_strings(event) # Will return None, None if KeyError
+    return event_name, event_url
 
 def get_events_request_from_city_name(city_name):
     '''
@@ -52,11 +60,11 @@ def get_events_request_from_city_name(city_name):
 
     response = API_request(url, query)
     if response is None:
-        return # TODO Handle a Non-response
+        message('Unable to get event information from Ticketmaster.')
+        return None
     else: 
         return response
 
-    
 
 def get_random_event_from_response(response):    
     '''
@@ -65,34 +73,26 @@ def get_random_event_from_response(response):
     :input: response dictionary
     :outputs: [dict] event key:value pair, [dict] error information
     '''
-    print(response)
-    events = response['_embedded']['events']
-    event_count = len(events)
-    rand_event_choice = randint(1, event_count)
-    chosen_event = events[rand_event_choice]
-    
-    return chosen_event
+    try:   
+        events = response['_embedded']['events']
+        event_count = len(events)
+        rand_event_choice = randint(1, event_count)
+        chosen_event = events[rand_event_choice]
+        return chosen_event
+    except KeyError:
+        message('Unexpected response from Ticketmaster API.')
+        return None
 
-def convert_event_name_to_str(event):
+
+def convert_event_to_strings(event):
     '''
     :input: [dict] event info
-    :output: [str] event name   
+    :outputs: [str] event name, [str] event_url   
     '''
-    event_name = event['name']
-    return event_name
-
-def main():
-    city_name = import_city_name() 
-
-    response = get_events_request_from_city_name(city_name)
     try:
-        event = get_random_event_from_response(response)
-    except Exception as e:
-        message(e) # TODO - User friendly error handling
-    
-    event_name = convert_event_name_to_str(event)
-    return event_name # TODO - tie into main.py. Give some variables.
-
-main()        
-
-    # return event_str to api_handler -> main.py
+        event_name = event['name']
+        event_url = event['url']
+        return event_name, event_url
+    except KeyError: 
+        message('Unexpected response from Ticketmaster API.')
+        return None, None
