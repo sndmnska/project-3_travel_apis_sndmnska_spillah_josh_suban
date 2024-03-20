@@ -19,11 +19,26 @@ chosen_restaurant = None
 event_name = None
 event_url = None
 
-def main():
-    """
-        Main entry point for our program. Everything starts here.
-        :return:
-        """
+def user_main_menu():
+
+    menu = '''
+    Please choose a menu option: 
+    \t(1): Lookup Information for new city
+    \t(2): Retrieve stored information
+    \t(Q): Quit program
+
+    Enter your choice: '''
+    
+    while True:
+        menu_choice = user_question(menu)
+        if menu_choice == 1 or menu_choice == 2 or menu_choice.upper() == "Q":
+            return menu_choice
+        else: 
+            message("Please choose a valid menu option.")
+
+
+
+def lookup_city_and_retrieve_travel_information():
     user_city = get_city()
 
     geo_data = geo_request(user_city)
@@ -53,6 +68,30 @@ def main():
                 break
     else:
         message('No restaurants found in the given location.')
+
+def incomplete_feature():
+    # HACK - This is just to get the menu working with something.  Displays a message saying feature not yet implimented.
+    message('Our apologies: This feature is not yet implimented')
+
+def main():
+    """
+    Main entry point for our program. Everything starts here.
+    :return:
+    """
+    welcome_msg= '''**Welcome to your travel helper program!** 
+    
+    This program can look up any city and get information about any travel advisories.
+    It also looks up a random event in that city from TicketMaster and displays a place where you can eat some tasty food.
+    '''
+    message(welcome_msg)
+    chosen_option = user_main_menu()
+    if chosen_option == 1:
+        lookup_city_and_retrieve_travel_information()
+
+    
+
+
+
 
     store_data()
 
