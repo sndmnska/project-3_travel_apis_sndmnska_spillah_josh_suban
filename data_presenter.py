@@ -7,7 +7,6 @@ This module is used to process inputs from API calls and return the data in a us
 
 import sqlite3
 from ui import message
-from db_handler import add_restaurant_data
 
 class DataPresenter:
 
@@ -75,7 +74,6 @@ def print_businesses(restaurant):
         address = restaurant['location'].get('address1')
         message(f"Name: {name}, City: {city}, Country: {country}, Address: {address}")
 
-        add_restaurant_data(name, city, country, address)
 
     else:
         message('No restaurants found in the given location.')
