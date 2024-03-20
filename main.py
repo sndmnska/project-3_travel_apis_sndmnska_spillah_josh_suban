@@ -14,6 +14,7 @@ from api_food_to_eat import get_restaurants_for_location
 user_city = None
 user_country_code = None
 travel_advisory_message = None
+chosen_restaurant = None
 
 event_name = None
 event_url = None
@@ -34,12 +35,16 @@ def main():
 
     event_name, event_url = get_random_local_event(user_city)
 
+    print(event_name)
+    print(event_url)
+
     location = f"{user_city}, {user_country_code}"
     restaurants = get_restaurants_for_location(location)
 
     if restaurants:
         for restaurant in restaurants:
             print_businesses(restaurant)
+            chosen_restaurant = restaurant
             # add_restaurant_data(restaurant)
 
             make_choice = user_question("Press Enter to continuous or 'q' to quit: ")
@@ -48,6 +53,8 @@ def main():
                 break
     else:
         message('No restaurants found in the given location.')
+
+    store_data()
 
 
 def get_city():
@@ -64,25 +71,14 @@ def get_city():
     return city.capitalize()
 
 def store_data():
-    db_handler = DBHandler('records_db.sqlite')
+    db_handler = DBHandler()
 
-    db_handler.create_table()# creates table if it does not exist
+    save_id = db_handler.create_table()# creates table if it does not exist
+    # the following lines add data using dbhandler methods
 
-#the following lines add data using dbhandler methods
+    db_handler.add_travel_advisory(save_id, user_country_code, travel_advisory_message)
+    db_handler.add_food_to_eat(save_id, user_city,chosen_restaurant)
+    db_handler.add_things_to_do(save_id, event_name, event_url)
+    db_handler.add_geo_location(save_id, user_city)
 
-db_handler.add_travel_advisory(advisory_data)
-db_handler.addd_food_to_eat(food_data)
-db_handler.add_things_to_do(things_to_do_data)
-db_handler.add_geo_location(geo_location_data)
-
-# finding geo location data
-place_name = "place name"
-geo_location = DataPresenter.get_geolocation_data(place_name)
-print(geo_location)
-
-
-if __name__ == "__main__":
-    main()
-
-if __name__ == "__main__":
-    store_data()
+main()
