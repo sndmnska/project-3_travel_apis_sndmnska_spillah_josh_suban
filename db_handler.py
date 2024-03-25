@@ -9,8 +9,10 @@ class DBHandler:
     def create_table(self):  # to check if table exists
         # creates table if table does not exists
 
-        save_id = 0
         with sqlite3.connect('records_db.sqlite') as conn:
+
+            conn.execute('CREATE TABLE IF NOT EXISTS result_id (id INTEGER PRIMARY KEY, search_term TEXT)')
+
             conn.execute(
                 'CREATE TABLE IF NOT EXISTS food_to_eat(id INTEGER, city TEXT, restaurant_name TEXT)')
 
@@ -20,13 +22,17 @@ class DBHandler:
                 'CREATE TABLE IF NOT EXISTS geo_location(id INTEGER, place_name TEXT)')
             cursor = conn.cursor()
             cursor.execute("SELECT count(country) FROM travel_advisory")
-            (data_test, ) = cursor.fetchone()
-
-            save_id = data_test + save_id
 
         conn.close()
 
-        return save_id
+
+    def generate_unique_id(self, search_term):
+        # insert a new row into the result_id table. SQLlite will generate a unique value 
+        with sqlite3.connect('records_db.sqlite') as conn:
+            result = conn.execute('INSERT INTO result_id (search_term) VALUES (?)', (search_term,) )
+        conn.close()
+        return result.lastrowid
+
 
     # functions to put data in the right tables in the SQLITE database
 

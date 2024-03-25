@@ -39,6 +39,10 @@ def user_main_menu():
 
 
 def lookup_city_and_retrieve_travel_information():
+
+    global user_country_code, user_city, user_country_code, \
+        travel_advisory_message, chosen_restaurant, event_name, event_url
+    
     user_city = get_city()
 
     geo_data = geo_request(user_city)
@@ -74,9 +78,9 @@ def lookup_city_and_retrieve_travel_information():
     while True:
         save_choice = user_question("Would you like to save this data in the database? Y/N: ")
         if save_choice.upper() == 'Y' or save_choice.upper == 'N':
-            if save_choice.upper == 'Y':
+            if save_choice.upper() == 'Y':   # upper is the function definition, upper() is calling the function 
                 save_bool = True
-            if save_choice.upper == 'N':
+            if save_choice.upper() == 'N':
                 save_bool = False
             break
 
@@ -133,11 +137,19 @@ def get_city():
 def store_data():
     db_handler = DBHandler()
 
-    save_id = db_handler.create_table()# creates table if it does not exist
+    db_handler.create_table()# creates table if it does not exist  -- why not do this when the program starts? 
+
+    # Call new function to get unique number for these results 
+    save_id = db_handler.generate_unique_id(user_city)
     # the following lines add data using dbhandler methods
 
     db_handler.add_travel_advisory(save_id, user_country_code, travel_advisory_message)
-    db_handler.add_food_to_eat(save_id, user_city,chosen_restaurant)
+
+    # Chosen restaurant is a dictionary. Either convert the dictionary to a JSON string, 
+    # or extract the restaurant's name 
+    chosen_restaurant_name = chosen_restaurant['name']
+    db_handler.add_food_to_eat(save_id, user_city, chosen_restaurant_name)
+
     db_handler.add_things_to_do(save_id, event_name, event_url)
     db_handler.add_geo_location(save_id, user_city)
 
